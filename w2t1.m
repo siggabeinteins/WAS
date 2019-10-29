@@ -4,7 +4,7 @@ close all; clear all;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Setup (part A)
-beta = 4;   % Number of bits per symbol--BPSK,QPSK ...
+beta = 2;   % Number of bits per symbol--BPSK,QPSK ...
 N = 256;    % Length of one block of symbols
 m = 3;      % Time delay, dependant of number of conv
 R = 1/2;    % Rate of code
@@ -42,7 +42,7 @@ g0 = mod(g0,2);             % Taking modulo 2 of the whole matrix
 g1 = conv(x,co1);           % Convolving with the convolution matrix
 g1 = mod(g1,2);             % Taking modulo 2 of the whole matrix
 
-xencoded =[g0'; g1'];       % Encoded x
+xencoded =[g0; g1];       % Encoded x
 xencoded = xencoded(:)';    % Interleaving g0 and g1 to make the encoded x
 %xencoded = 1:1536;         % Good for visualization
 
