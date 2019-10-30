@@ -121,10 +121,10 @@ Errorrate = 100*Nerr/Nb;            % Error rate calculated
 
 %% Multiple SNR (Part K)
 % Here we can decide the iterations for each mapping type
-iterqpsk = 300;
-iterbpsk = 500;
-iter16 = 200;
-iter64 = 200;
+iterqpsk = 10;
+iterbpsk = 1000;
+iter16 = 10;
+iter64 = 10;
     %% QPSK Errsqpsk
 SNRdB = [-20:1:20];
 Errsqpsk = zeros(1,length(SNRdB));
@@ -351,11 +351,9 @@ legend('BPSK','QPSK','16-QAM','64-QAM')
 
 %% Uncoded transmission (Part L)
     %% QPSK Errsqpsk2
+SNRdB = [-20:1:20];
 Errsqpsk2 = zeros(1,length(SNRdB));
-fprintf('\nQPSK-uncoded ');
-beta = 2;
-Nb = N;
-Mapping = 'QPSK';
+fprintf('QPSK ');
 for t=1:length(SNRdB)
     errors = zeros(1,length(SNRdB));
     totalerror = 0;
@@ -376,8 +374,7 @@ for t=1:length(SNRdB)
 %             I(i:i+N-1) = tmp;
 %         end
 %         xinterleaved = I;
-        Xup = mapping(x,Mapping);
-        Nn = length(Xup);
+        Xup = mapping(x,Mapping);   
         var = Eup/(2*10^(SNRdBi/10));    % var^2 calculated
         noise = randn(1,Nn)*sqrt(var);  % AWGN
         Signal = Xup + noise; 
@@ -389,11 +386,11 @@ for t=1:length(SNRdB)
 %             tmp = reshape(tmp,1,N);
 %             I(i:i+N-1) = tmp;
 %         end
-%         Xdinterleaved = I;
+        Xdinterleaved = I;
 %         tr = poly2trellis([m + 1], [g(1) g(2)]);
 %         tracebacklength = 5*m;
 %         decoded = vitdec(Xdinterleaved, tr, tracebacklength, 'term', 'hard');
-        decoded = Xdown;
+        decoded = Xdinterleaved;
         Nerr = 0;                           % Initialization
         for i=1:Nb                          % Tally up all errors 
             if decoded(i)~=x(i)
@@ -406,11 +403,11 @@ for t=1:length(SNRdB)
     Errsqpsk2(t) = totalerror/iterqpsk;
     fprintf('%d ',t);
 end
-    %% Plotting for part L
+%%
 figure
-semilogy(SNRdB,Errsqpsk)
+semilogy(SNRdB,Errsbpsk)
 hold on
-semilogy(SNRdB,Errsqpsk2)
+semilogy(SNRdB,Errsbpsk2)
 legend('Encoded','Non-encoded')
 
 
